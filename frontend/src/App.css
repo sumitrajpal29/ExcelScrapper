@@ -1,0 +1,39 @@
+* {
+  background-color: #aee9a42b;
+}
+
+.container {
+  text-align: center;
+}
+
+.upload-button {
+  margin-bottom: 10px;
+  color: #ffff;
+  background-color: #61dafb;
+}
+
+.filters {
+  margin-bottom: 10px;
+}
+
+.filter-label {
+  margin-right: 10px;
+}
+
+.filter-input {
+  margin-right: 10px;
+}
+
+.filter-button {
+  padding: 5px 10px;
+  background-color: #61dafb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.data-item {
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
