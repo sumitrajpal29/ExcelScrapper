@@ -4,7 +4,7 @@ import './DataComponent.css';
 function DataComponent({ data }) {
   return (
     <div className="container">
-      <h2>Data: <span>({data.length})</span></h2>
+      <h2>Total: <span>({data.length})</span></h2>
       {data.length > 0 ?
 
         (
