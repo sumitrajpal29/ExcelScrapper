@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DataComponent from './components/DataComponent';
 import './App.css';
+import saveAS from 'file-saver';
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -55,6 +56,20 @@ function App() {
     }
   };
 
+  const handleDownload = () => {
+
+    if (data.length == 0) {
+      alert("No data to Download !");
+      return;
+    }
+
+    const csvData = data.map(item => Object.values(item).join(',')).join('\n');
+
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+
+    saveAS(blob, 'data.csv');
+  };
+
   const handleFilter = () => {
     fetchData();
   };
@@ -84,7 +99,7 @@ function App() {
             onChange={(e) => setBillabilityFilter(e.target.value)}
           />
         </label>
-        
+
         <label className="filter-label">
           Grade<span> </span>
           <input
@@ -94,6 +109,9 @@ function App() {
             onChange={(e) => setGradeFilter(e.target.value)}
           />
         </label>
+        <button className="upload-button" onClick={handleDownload}>
+          Download
+        </button>
 
         {/* I think  Button is not usefull here */}
         {/* <button className="filter-button" onClick={handleFilter}>
