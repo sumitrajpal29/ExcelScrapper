@@ -58,20 +58,30 @@ function App() {
 
   const handleDownload = () => {
 
+    // Check if data is empty
     if (data.length == 0) {
       alert("No data to Download !");
       return;
     }
 
-    const csvData = data.map(item => Object.values(item).join(',')).join('\n');
+    // Exclude the MongoDB ID and __v fields from the data
+    const excludedFields = ['_id', '__v'];
+    const filteredData = data.map(item => {
+      const filteredItem = { ...item };
+      excludedFields.forEach(field => delete filteredItem[field]);
+      return filteredItem;
+    });
 
+    // Get the column headings from the first item in the data
+    const columnHeadings = Object.keys(filteredData[0]);
+    // const csvData = filteredData.map(item => Object.values(item).join(',')).join('\n');
+    const csvData = [
+      columnHeadings.join(','),
+      ...filteredData.map(item => columnHeadings.map(heading => item[heading]).join(','))
+    ].join('\n');
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
 
     saveAS(blob, 'data.csv');
-  };
-
-  const handleFilter = () => {
-    fetchData();
   };
 
   return (
