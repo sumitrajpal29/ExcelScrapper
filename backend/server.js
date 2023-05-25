@@ -39,6 +39,10 @@ const empSchema = new mongoose.Schema({
 
 const Employee = mongoose.model('Employee', empSchema);
 
+
+
+
+
 // Define route for uploading Excel file
 app.post('/upload', upload.single('file'), async (req, res) => {
     try {
@@ -49,7 +53,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
         // Insert data to MongoDB
         const result = await Employee.insertMany(sheetData);
-        
+
         res.send('File uploaded successfully');
     } catch (err) {
         console.error(err);
@@ -82,6 +86,14 @@ app.get('/get', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+app.delete('/delete:id', async (req, res, next) => {
+    try {
+        console.log("Working!");
+    } catch {
+        console.log("some error in BackEnd");
     }
 });
 
