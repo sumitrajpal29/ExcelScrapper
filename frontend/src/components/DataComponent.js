@@ -6,8 +6,14 @@ function DataComponent({ data }) {
 
   async function handleDelete(id) {
     try {
-      await axios.delete(`http://localhost:8000/delete/${id}`);
-      console.log('Employee deleted successfully');
+      await axios.delete(`http://localhost:8000/delete/${id}`)
+        .then(res => {
+          console.log("REsponse: " + res.data);
+          // setIsDeleted(true);
+          window.location.reload();
+        })
+      console.log("ID: " + id);
+      console.log('Employee deleted successfully')
       // Perform any additional actions after successful deletion
     } catch (error) {
       console.log("error in FE");

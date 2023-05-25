@@ -3,6 +3,9 @@ const multer = require('multer');
 const xlsx = require('xlsx');
 const mongoose = require('mongoose');
 const cors = require('cors');
+// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+const { BrowserRouter, Switch, Route } = require('react-router-dom');
+
 
 const app = express();
 const port = 8000;
@@ -89,11 +92,14 @@ app.get('/get', async (req, res) => {
     }
 });
 
-app.delete('/delete:id', async (req, res, next) => {
+app.delete('/delete/:id', async (req, res) => {
     try {
-        console.log("Working!");
-    } catch {
-        console.log("some error in BackEnd");
+        const { id } = req.params;
+        Employee.deleteOne({ empId: id })
+            .then(res.send("Deleted Successfully"));
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
     }
 });
 
