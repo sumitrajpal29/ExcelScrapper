@@ -25,12 +25,13 @@ const upload = multer({ storage });
 
 // Enable CORS
 app.use(cors());
+app.use(express.json());
 
 // MongoDb connection
 mongoose.connect('mongodb://localhost:27017/cogniDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
-});
+}); 
 
 const empSchema = new mongoose.Schema({
     empId: Number,
@@ -102,6 +103,26 @@ app.delete('/delete/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.put('/update/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { empId, name, projectId, grade, billability } = req.body;
+
+        const updatedEmployee = await Employee.findOneAndUpdate(
+            { empId: id },
+            { empId, name, projectId, grade, billability },
+            { new: true }
+        );
+
+        res.json(updatedEmployee);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
