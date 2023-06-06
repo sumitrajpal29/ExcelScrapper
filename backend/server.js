@@ -25,6 +25,7 @@ const upload = multer({ storage });
 
 // Enable CORS
 app.use(cors());
+app.use(express.json());
 
 // MongoDb connection
 mongoose.connect('mongodb://localhost:27017/cogniDB', {
@@ -41,6 +42,8 @@ const empSchema = new mongoose.Schema({
 });
 
 const Employee = mongoose.model('Employee', empSchema);
+
+const Trash = mongoose.model('Trash', empSchema);
 
 
 
@@ -95,13 +98,35 @@ app.get('/get', async (req, res) => {
 app.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        Employee.deleteOne({ empId: id })
+        const trashData = await Employee.findOne({ empId: id });
+        await Trash.insertMany(trashData);
+        await Employee.deleteOne({ empId: id })
             .then(res.send("Deleted Successfully"));
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.put('/update/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { empId, name, projectId, grade, billability } = req.body;
+
+        const updatedEmployee = await Employee.findOneAndUpdate(
+            { empId: id },
+            { empId, name, projectId, grade, billability },
+            { new: true }
+        );
+
+        res.json(updatedEmployee);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

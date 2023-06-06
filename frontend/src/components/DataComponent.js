@@ -9,7 +9,8 @@ function DataComponent({ data }) {
       await axios.delete(`http://localhost:8000/delete/${id}`)
         .then(res => {
           console.log("REsponse: " + res.data);
-          // setIsDeleted(true);
+
+          // try to make data change without refresh in future
           window.location.reload();
         })
       console.log("ID: " + id);
