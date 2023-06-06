@@ -31,7 +31,7 @@ app.use(express.json());
 mongoose.connect('mongodb://localhost:27017/cogniDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}); 
+});
 
 const empSchema = new mongoose.Schema({
     empId: Number,
@@ -42,6 +42,8 @@ const empSchema = new mongoose.Schema({
 });
 
 const Employee = mongoose.model('Employee', empSchema);
+
+const Trash = mongoose.model('Trash', empSchema);
 
 
 
@@ -96,7 +98,9 @@ app.get('/get', async (req, res) => {
 app.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        Employee.deleteOne({ empId: id })
+        const trashData = await Employee.findOne({ empId: id });
+        await Trash.insertMany(trashData);
+        await Employee.deleteOne({ empId: id })
             .then(res.send("Deleted Successfully"));
     } catch (err) {
         console.error(err);
