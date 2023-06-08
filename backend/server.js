@@ -70,7 +70,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 // Define route for fetching filtered data
 app.get('/get', async (req, res) => {
     try {
-        const { projectId, billability, grade } = req.query;
+        const { collectoin, projectId, billability, grade } = req.query;
 
         const filters = {};
 
@@ -85,13 +85,22 @@ app.get('/get', async (req, res) => {
         if (grade) {
             filters.grade = grade;
         }
-
         const employees = await Employee.find(filters);
 
         res.json(employees);
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/get-trash', async(req,res)=>{
+    try {
+        const trashData=await Trash.find();
+        res.json(trashData);
+    } catch (error) {
+        console.error(err);
+        res.status(500).send('Error in fetching trash data')   ; 
     }
 });
 

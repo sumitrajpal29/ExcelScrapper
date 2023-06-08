@@ -3,10 +3,12 @@ import axios from 'axios';
 import DataComponent from './components/DataComponent';
 import './App.css';
 import saveAS from 'file-saver';
+import TrashComponent from './components/TrashComponent';
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [data, setData] = useState([]);
+  const [trashData, setTrashData] =useState([]);
   const [projectIdFilter, setProjectIdFilter] = useState('');
   const [billabilityFilter, setBillabilityFilter] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
@@ -21,6 +23,14 @@ function App() {
         }
       });
       setData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchTrashData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/get-trash');
+      setTrashData(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -49,6 +59,7 @@ function App() {
           console.log(res.data);
           setSelectedFile(null);
           fetchData();
+          fetchTrashData();
         })
         .catch((err) => {
           console.error(err);
@@ -130,6 +141,7 @@ function App() {
 
       </div>
       <DataComponent className='container' data={data} />
+      <TrashComponent data={trashData}/>
     </div>
   );
 }
