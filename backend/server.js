@@ -32,7 +32,7 @@ mongoose.connect('mongodb://localhost:27017/cogniDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
-
+// Schema to be changed accoring excel
 const empSchema = new mongoose.Schema({
     empId: Number,
     name: String,

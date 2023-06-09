@@ -37,3 +37,35 @@
   border: 1px solid #ccc;
   padding: 10px;
 }
+
+
+/* Navbar CSS */
+.navbar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar li {
+  margin-top: 10px;
+}
+
+.navbar li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.navbar li a:hover {
+  background-color: #ddd;
+}

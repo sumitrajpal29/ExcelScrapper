@@ -1,8 +1,13 @@
 import React from 'react';
 import './DataComponent.css';
 import axios from 'axios';
+import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 
-function DataComponent({ data }) {
+function DataComponent({ data, selectEmployee }) {
+
+  function handleEdit(emp) {
+    selectEmployee(emp);
+  }
 
   async function handleDelete(id) {
     try {
@@ -32,7 +37,7 @@ function DataComponent({ data }) {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Edit</th>
+                <th></th>
 
                 <th>Emp ID</th>
                 <th>Name</th>
@@ -40,26 +45,22 @@ function DataComponent({ data }) {
                 <th>Grade</th>
                 <th>Billability</th>
 
-                <th>Delete</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
 
                 <tr key={item.empId}>
-                  <td>
-                    <button>Edit</button>
-                  </td>
 
+                  <AiOutlineEdit color='blue' onClick={() => { handleEdit(item) }} />
                   <td>{item.empId}</td>
                   <td>{item.name}</td>
                   <td>{item.projectId}</td>
                   <td>{item.grade}</td>
                   <td>{item.billability}</td>
+                  <AiOutlineDelete color='red' onClick={() => handleDelete(item.empId)} />
 
-                  <td>
-                    <button onClick={() => handleDelete(item.empId)}>Delete</button>
-                  </td>
                 </tr>
               ))}
             </tbody>
