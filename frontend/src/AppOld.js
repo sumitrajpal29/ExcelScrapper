@@ -5,15 +5,34 @@ import './App.css';
 import saveAS from 'file-saver';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import NavbarComponent from './components/NavbarComponent';
-import UploadComponent from './components/UploadComponent';
+import EditComponent from './components/EditComponent';
 
 function App() {
+  const [selectedFile, setSelectedFile] = useState(null);
   const [data, setData] = useState([]);
   const [projectIdFilter, setProjectIdFilter] = useState('');
   const [billabilityFilter, setBillabilityFilter] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
   const [isEditVisible, setIsEditVisible] = useState(false);
-  const [view, setView] = useState('UploadComponent');
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+  const handleEdit = (employee) => {
+    setSelectedEmployee(employee);
+  };
+
+  const handleSave = (updatedData) => {
+    // Make the update request to the server using axios
+    axios
+      .put(`http://localhost:8000/update/${updatedData.empId}`, updatedData)
+      .then((res) => {
+        console.log(res.data);
+        setSelectedEmployee(null);
+        fetchData();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const fetchData = async () => {
     try {
@@ -34,6 +53,31 @@ function App() {
     fetchData();
   }, [projectIdFilter, billabilityFilter, gradeFilter]);
 
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios
+        .post('http://localhost:8000/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((res) => {
+          console.log(res.data);
+          setSelectedFile(null);
+          fetchData();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
 
   const handleDownload = () => {
 
@@ -63,13 +107,13 @@ function App() {
     saveAS(blob, 'data.csv');
   };
 
-
-
   return (
     <div className="container">
-      <NavbarComponent />
-      {(view === 'UploadComponent') && <UploadComponent fetchData={fetchData} setView={setView} />}
-    < div className = "filters" >
+      <input type="file" onChange={handleFileChange} />
+      <button className="upload-button" onClick={handleUpload}>
+        Upload
+      </button>
+      <div className="filters">
         <label className="filter-label">
           Project ID<span> </span>
           <input
@@ -102,14 +146,25 @@ function App() {
           Download
         </button>
 
-  {/* I think  Button is not usefull here */ }
-  {/* <button className="filter-button" onClick={handleFilter}>
+        {/* I think  Button is not usefull here */}
+        {/* <button className="filter-button" onClick={handleFilter}>
           Filter
         </button> */}
 
-      </div >
-    <DataComponent className='container' data={data} setEditVisible={setIsEditVisible} />
-    </div >
+      </div>
+      <DataComponent className='container' data={data} selectEmployee={setSelectedEmployee} />
+      {selectedEmployee && (
+        <EditComponent
+          empId={selectedEmployee.empId}
+          name={selectedEmployee.name}
+          projectId={selectedEmployee.projectId}
+          grade={selectedEmployee.grade}
+          billability={selectedEmployee.billability}
+          onSave={handleSave}
+          onCancel={() => setSelectedEmployee(null)}
+        />
+      )}
+    </div>
   );
 }
 
