@@ -6,14 +6,14 @@ import saveAS from 'file-saver';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import NavbarComponent from './components/NavbarComponent';
 import EditComponent from './components/EditComponent';
+import UploadComponent from './components/UploadComponent';
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
   const [data, setData] = useState([]);
   const [projectIdFilter, setProjectIdFilter] = useState('');
   const [billabilityFilter, setBillabilityFilter] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
-  const [isEditVisible, setIsEditVisible] = useState(false);
+  const [uploadNew, showUploadNew] = useState(true);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   const handleEdit = (employee) => {
@@ -53,31 +53,6 @@ function App() {
     fetchData();
   }, [projectIdFilter, billabilityFilter, gradeFilter]);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const handleUpload = () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      axios
-        .post('http://localhost:8000/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-          console.log(res.data);
-          setSelectedFile(null);
-          fetchData();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
 
   const handleDownload = () => {
 
@@ -109,10 +84,8 @@ function App() {
 
   return (
     <div className="container">
-      <input type="file" onChange={handleFileChange} />
-      <button className="upload-button" onClick={handleUpload}>
-        Upload
-      </button>
+      {uploadNew && <UploadComponent fetchData={fetchData} setUploadView={showUploadNew} />}
+
       <div className="filters">
         <label className="filter-label">
           Project ID<span> </span>

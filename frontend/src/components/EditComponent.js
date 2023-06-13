@@ -24,6 +24,8 @@ const EditComponent = ({ empId, name, projectId, grade, billability, onSave, onC
         onCancel();
     };
 
+    
+
     return (
         <div className="edit-popup">
             <label>
