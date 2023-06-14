@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom/';
 import DataComponent from './DataComponent';
 import TrashComponent from './TrashComponent';
 import UploadComponent from './UploadComponent';

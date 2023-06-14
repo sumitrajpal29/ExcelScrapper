@@ -3,9 +3,9 @@ import axios from 'axios';
 import DataComponent from './components/DataComponent';
 import './App.css';
 import saveAS from 'file-saver';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+// import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import NavbarComponent from './components/NavbarComponent';
-import UploadComponent from './components/UploadComponent';
+import UploadComponent from  './components/UploadComponent';
 
 function App() {
   const [data, setData] = useState([]);
