@@ -41,10 +41,18 @@ function DataComponent({ data, selectEmployee }) {
 
                 <th>Emp ID</th>
                 <th>Name</th>
-                <th>Project ID</th>
                 <th>Grade</th>
-                <th>Billability</th>
-
+                <th>Is Onsite</th>
+                <th>Project Id</th>
+                <th>Project Name</th>
+                <th>Manager Name</th>
+                <th>Available Hours</th>
+                <th>Billed Hours</th>
+                <th>Utilization %</th>
+                <th>Utilization Range</th>
+                <th>Billed FTE</th>
+                <th>Total FTE</th>
+                <th>Unbilled FTE</th>
                 <th></th>
               </tr>
             </thead>
@@ -56,9 +64,18 @@ function DataComponent({ data, selectEmployee }) {
                   <AiOutlineEdit color='blue' onClick={() => { handleEdit(item) }} />
                   <td>{item.empId}</td>
                   <td>{item.name}</td>
-                  <td>{item.projectId}</td>
                   <td>{item.grade}</td>
-                  <td>{item.billability}</td>
+                  <td>{item.isOnsite}</td>
+                  <td>{item.projectId}</td>
+                  <td>{item.projectName}</td>
+                  <td>{item.managerName}</td>
+                  <td>{item.availableHours}</td>
+                  <td>{item.billedHours}</td>
+                  <td>{item.utilizationPercentage}</td>
+                  <td>{item.utilizationRange}</td>
+                  <td>{item.billedFTE}</td>
+                  <td>{item.totalFTE}</td>
+                  <td>{item.unbilledFTE}</td>
                   <AiOutlineDelete color='red' onClick={() => handleDelete(item.empId)} />
 
                 </tr>

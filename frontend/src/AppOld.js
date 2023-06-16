@@ -7,14 +7,18 @@ import saveAS from 'file-saver';
 import NavbarComponent from './components/NavbarComponent';
 import EditComponent from './components/EditComponent';
 import UploadComponent from './components/UploadComponent';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import TrashComponent from './components/TrashComponent';
+
+
 
 function App() {
   const [data, setData] = useState([]);
   const [projectIdFilter, setProjectIdFilter] = useState('');
   const [billabilityFilter, setBillabilityFilter] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
-  const [uploadNew, showUploadNew] = useState(true);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [view, setView] = useState('home');
 
   const handleEdit = (employee) => {
     setSelectedEmployee(employee);
@@ -84,8 +88,20 @@ function App() {
 
   return (
     <div className="container">
-      {uploadNew && <UploadComponent fetchData={fetchData} setUploadView={showUploadNew} />}
+      <div className=''>
+      <button onClick={()=>setView('home')}>Home</button>
+      <button onClick={()=>setView('upload')}>Upload</button>
+      <button onClick={()=>setView('trash')}>Trash</button>
+      </div>
 
+
+      {/* upload view*/}
+      {view==='upload' && <UploadComponent fetchData={fetchData}/>}
+
+      {/* Home view*/}
+      {view==='home' &&
+      <div>
+        {/* Filters */}
       <div className="filters">
         <label className="filter-label">
           Project ID<span> </span>
@@ -96,7 +112,6 @@ function App() {
             onChange={(e) => setProjectIdFilter(e.target.value)}
           />
         </label>
-
         <label className="filter-label">
           Billability<span> </span>
           <input
@@ -105,7 +120,6 @@ function App() {
             onChange={(e) => setBillabilityFilter(e.target.value)}
           />
         </label>
-
         <label className="filter-label">
           Grade<span> </span>
           <input
@@ -115,17 +129,22 @@ function App() {
             onChange={(e) => setGradeFilter(e.target.value)}
           />
         </label>
+
         <button className="upload-button" onClick={handleDownload}>
           Download
         </button>
-
         {/* I think  Button is not usefull here */}
         {/* <button className="filter-button" onClick={handleFilter}>
           Filter
         </button> */}
-
       </div>
+
+
+      {/* Data component */}
       <DataComponent className='container' data={data} selectEmployee={setSelectedEmployee} />
+
+      
+       {/* Edit component */}
       {selectedEmployee && (
         <EditComponent
           empId={selectedEmployee.empId}
@@ -136,7 +155,16 @@ function App() {
           onSave={handleSave}
           onCancel={() => setSelectedEmployee(null)}
         />
-      )}
+      )}  
+      </div>
+      }
+      {/* End of home view*/}
+
+      {/* trash view */}
+      {view==='trash' &&
+      <TrashComponent/>
+      }
+
     </div>
   );
 }

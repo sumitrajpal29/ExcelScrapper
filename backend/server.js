@@ -36,16 +36,23 @@ mongoose.connect('mongodb://localhost:27017/cogniDB', {
 const empSchema = new mongoose.Schema({
     empId: Number,
     name: String,
-    projectId: Number,
     grade: String,
-    billability: String
+    isOnsite: String,
+    projectId: Number,
+    projectName: String,
+    managerName: String,
+    availableHours: Number,
+    billedHours: Number,
+    utilizationPercentage: Number,
+    utilizationRange: String,
+    billedFTE: Number,
+    totalFTE: Number,
+    unbilledFTE: Number //(totalFTE - billedFTE)
 });
 
 const Employee = mongoose.model('Employee', empSchema);
 
 const Trash = mongoose.model('Trash', empSchema);
-
-
 
 
 
@@ -103,6 +110,16 @@ app.delete('/delete/:id', async (req, res) => {
         await Employee.deleteOne({ empId: id })
             .then(res.send("Deleted Successfully"));
     } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/trash', async(req,res)=>{
+    try{
+        const trashes=await Trash.find();
+        res.json(trashes);
+    } catch(err){
         console.error(err);
         res.status(500).send('Internal Server Error');
     }

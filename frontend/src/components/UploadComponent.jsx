@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 
-export default function UploadComponent({ fetchData, setUploadView }) {
+export default function UploadComponent({ fetchData }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -24,7 +24,6 @@ export default function UploadComponent({ fetchData, setUploadView }) {
           console.log(res.data);
           setSelectedFile(null);
           fetchData();
-          setUploadView(false);
         })
         .catch((err) => {
           console.error(err);
