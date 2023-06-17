@@ -3,7 +3,7 @@ import './DataComponent.css';
 import axios from 'axios';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 
-function DataComponent({ data, selectEmployee }) {
+function DataComponent({ data, selectEmployee, refresh }) {
 
   function handleEdit(emp) {
     selectEmployee(emp);
@@ -16,7 +16,8 @@ function DataComponent({ data, selectEmployee }) {
           console.log("REsponse: " + res.data);
 
           // try to make data change without refresh in future
-          window.location.reload();
+          // window.location.reload();
+          refresh();
         })
       console.log("ID: " + id);
       console.log('Employee deleted successfully')

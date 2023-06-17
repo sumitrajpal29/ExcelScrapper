@@ -12,7 +12,6 @@ function App() {
   const [projectIdFilter, setProjectIdFilter] = useState('');
   const [billabilityFilter, setBillabilityFilter] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
-  const [isEditVisible, setIsEditVisible] = useState(false);
   const [view, setView] = useState('UploadComponent');
 
   const fetchData = async () => {
