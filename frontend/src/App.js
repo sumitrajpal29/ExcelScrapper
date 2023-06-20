@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import DataComponent from './components/DataComponent';
-import './App.css';
-import saveAS from 'file-saver';
-// import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import NavbarComponent from './components/NavbarComponent';
-import EditComponent from './components/EditComponent';
-import UploadComponent from './components/UploadComponent';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import TrashComponent from './components/TrashComponent';
-
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import DataComponent from "./components/DataComponent";
+import "./App.css";
+import saveAS from "file-saver";
+import NavbarComponent from "./components/NavbarComponent";
+import EditComponent from "./components/EditComponent";
+import UploadComponent from "./components/UploadComponent";
+import TrashComponent from "./components/TrashComponent";
 
 function App() {
   const [data, setData] = useState([]);
-  const [projectIdFilter, setProjectIdFilter] = useState('');
-  const [billabilityFilter, setBillabilityFilter] = useState('');
-  const [gradeFilter, setGradeFilter] = useState('');
+  const [projectIdFilter, setProjectIdFilter] = useState("");
+  const [billabilityFilter, setBillabilityFilter] = useState("");
+  const [gradeFilter, setGradeFilter] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [view, setView] = useState('home');
-
+  const [view, setView] = useState("home");
 
   const handleSave = (updatedData) => {
     // Make the update request to the server using axios
@@ -37,12 +32,12 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/get', {
+      const response = await axios.get("http://localhost:8000/get", {
         params: {
           projectId: projectIdFilter,
           billability: billabilityFilter,
-          grade: gradeFilter
-        }
+          grade: gradeFilter,
+        },
       });
       setData(response.data);
     } catch (error) {
@@ -54,9 +49,7 @@ function App() {
     fetchData();
   }, [projectIdFilter, billabilityFilter, gradeFilter]);
 
-
   const handleDownload = () => {
-
     // Check if data is empty
     if (data.length === 0) {
       alert("No data to Download !");
@@ -64,10 +57,10 @@ function App() {
     }
 
     // Exclude the MongoDB ID and __v fields from the data
-    const excludedFields = ['_id', '__v'];
-    const filteredData = data.map(item => {
+    const excludedFields = ["_id", "__v"];
+    const filteredData = data.map((item) => {
       const filteredItem = { ...item };
-      excludedFields.forEach(field => delete filteredItem[field]);
+      excludedFields.forEach((field) => delete filteredItem[field]);
       return filteredItem;
     });
 
@@ -75,28 +68,31 @@ function App() {
     const columnHeadings = Object.keys(filteredData[0]);
     // const csvData = filteredData.map(item => Object.values(item).join(',')).join('\n');
     const csvData = [
-      columnHeadings.join(','),
-      ...filteredData.map(item => columnHeadings.map(heading => item[heading]).join(','))
-    ].join('\n');
-    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+      columnHeadings.join(","),
+      ...filteredData.map((item) =>
+        columnHeadings.map((heading) => item[heading]).join(",")
+      ),
+    ].join("\n");
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
 
-    saveAS(blob, 'data.csv');
+    saveAS(blob, "data.csv");
   };
 
   return (
     <div className="container">
-      <div className=''>
-        <button onClick={() => setView('home')}>Home</button>
-        <button onClick={() => setView('upload')}>Upload</button>
-        <button onClick={() => setView('trash')}>Trash</button>
+      <div className="">
+        <button onClick={() => setView("home")}>Home</button>
+        <button onClick={() => setView("upload")}>Upload</button>
+        <button onClick={() => setView("trash")}>Trash</button>
       </div>
 
-
       {/* upload view*/}
-      {view === 'upload' && <UploadComponent refresh={fetchData} setView={setView} />}
+      {view === "upload" && (
+        <UploadComponent refresh={fetchData} setView={setView} />
+      )}
 
       {/* Home view*/}
-      {view === 'home' &&
+      {view === "home" && (
         <div>
           {/* Filters */}
           <div className="filters">
@@ -136,10 +132,13 @@ function App() {
         </button> */}
           </div>
 
-
           {/* Data component */}
-          <DataComponent className='container' data={data} selectEmployee={setSelectedEmployee} refresh={fetchData} />
-
+          <DataComponent
+            className="container"
+            data={data}
+            selectEmployee={setSelectedEmployee}
+            refresh={fetchData}
+          />
 
           {/* Edit component */}
           {selectedEmployee && (
@@ -154,14 +153,11 @@ function App() {
             />
           )}
         </div>
-      }
+      )}
       {/* End of home view*/}
 
       {/* trash view */}
-      {view === 'trash' &&
-        <TrashComponent refresh={fetchData} />
-      }
-
+      {view === "trash" && <TrashComponent refresh={fetchData} />}
     </div>
   );
 }
