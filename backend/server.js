@@ -67,9 +67,21 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         // Insert data to MongoDB
         const result = await Employee.insertMany(sheetData);
 
-        res.send('File uploaded successfully');
+        res.send('File uploaded successfully. Result = ' + result);
     } catch (err) {
         console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/uploadSingle', async (req, res) => {
+    try {
+        const item = req.body;
+
+        const isAdded = await Employee.create(item);
+        res.send("This is added to Employee" + isAdded);
+    } catch (error) {
+        console.log(error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -115,11 +127,22 @@ app.delete('/delete/:id', async (req, res) => {
     }
 });
 
-app.get('/trash', async(req,res)=>{
-    try{
-        const trashes=await Trash.find();
+app.delete('/trash/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Trash.deleteOne({ empId: id })
+            .then(res.send("Permanently deleted."))
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/trash', async (req, res) => {
+    try {
+        const trashes = await Trash.find();
         res.json(trashes);
-    } catch(err){
+    } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }

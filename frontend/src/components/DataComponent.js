@@ -18,9 +18,7 @@ function DataComponent({ data, selectEmployee, refresh }) {
           // try to make data change without refresh in future
           // window.location.reload();
           refresh();
-        })
-      console.log("ID: " + id);
-      console.log('Employee deleted successfully')
+        });
       // Perform any additional actions after successful deletion
     } catch (error) {
       console.log("error in FE");
