@@ -167,6 +167,32 @@ app.put('/update/:id', async (req, res) => {
 });
 
 
+app.get('/count', async (req, res) => {
+    try {
+        const { projectId, grade, isOnsite, projectName } = req.query;
+        const filters = {};
+
+        if (projectId) {
+            filters.projectId = projectId;
+        }
+        if (grade) {
+            filters.grade = grade;
+        }
+        if (isOnsite) {
+            filters.isOnsite = isOnsite;
+        }
+        if (projectName) {
+            filters.projectName = projectName;
+        }
+
+        const count = await Employee.countDocuments(filters);
+        res.json(count);
+    } catch (error) {
+        console.error(err);
+        res.status(500).send('Error in count endpoint');
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

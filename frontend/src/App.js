@@ -3,7 +3,7 @@ import axios from "axios";
 import DataComponent from "./components/DataComponent";
 import "./App.css";
 import saveAS from "file-saver";
-import NavbarComponent from "./components/NavbarComponent";
+// import NavbarComponent from "./components/NavbarComponent";
 import EditComponent from "./components/EditComponent";
 import UploadComponent from "./components/UploadComponent";
 import TrashComponent from "./components/TrashComponent";
