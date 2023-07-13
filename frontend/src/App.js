@@ -7,6 +7,7 @@ import saveAS from "file-saver";
 import EditComponent from "./components/EditComponent";
 import UploadComponent from "./components/UploadComponent";
 import TrashComponent from "./components/TrashComponent";
+import MainTable from "./components/MainTable";
 
 function App() {
   const [data, setData] = useState([]);
@@ -80,10 +81,27 @@ function App() {
 
   return (
     <div className="container">
-      <div className="">
-        <button onClick={() => setView("home")}>Home</button>
-        <button onClick={() => setView("upload")}>Upload</button>
-        <button onClick={() => setView("trash")}>Trash</button>
+      <div className="navbar">
+        <ul>
+          <h1>ExcelScrapper</h1>
+        </ul>
+
+        <ul>
+          <li>
+            <button onClick={() => setView("home")}>Home</button>
+          </li>
+
+          <li>
+            <button onClick={() => setView("upload")}>Upload</button>
+          </li>
+
+          <li>
+            <button onClick={() => setView("trash")}>Trash</button>
+          </li>
+          <li>
+            <button onClick={() => setView("summary")}>Summary</button>
+          </li>
+        </ul>
       </div>
 
       {/* upload view*/}
@@ -158,6 +176,9 @@ function App() {
 
       {/* trash view */}
       {view === "trash" && <TrashComponent refresh={fetchData} />}
+
+      {/*Summary table*/}
+      {view === "summary" && <MainTable selectEmployee={selectedEmployee} />}
     </div>
   );
 }

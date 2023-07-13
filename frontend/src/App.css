@@ -1,5 +1,5 @@
 * {
-  background-color: #aee9a42b;
+  background-color: #16ceef09;
 }
 
 .container {
@@ -38,9 +38,8 @@
   padding: 10px;
 }
 
-
 /* Navbar CSS */
-.navbar {
+/* .navbar {
   position: fixed;
   left: 0;
   top: 0;
@@ -68,4 +67,54 @@
 
 .navbar li a:hover {
   background-color: #ddd;
+} */
+
+.navbar {
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.navbar ul {
+  list-style-type: none;
+
+  margin: 0 20px;
+
+  padding: 0;
+
+  /* overflow: hidden; */
+}
+
+.navbar li {
+  float: left;
+
+  padding: 5px 20px;
+}
+
+.navbar li button {
+  /* display: block; */
+
+  border-style: dashed;
+
+  color: black;
+
+  text-align: center;
+
+  font-size: medium;
+
+  padding: 8px 16px;
+
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+
+.navbar li button:hover {
+  background-color: #16ceefa8;
 }

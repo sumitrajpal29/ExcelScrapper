@@ -37,6 +37,7 @@ const empSchema = new mongoose.Schema({
     empId: Number,
     name: String,
     grade: String,
+    billability:String,
     isOnsite: String,
     projectId: Number,
     projectName: String,
@@ -102,7 +103,7 @@ app.get('/get', async (req, res) => {
         }
 
         if (grade) {
-            filters.grade = grade;
+            filters.grade = grade; 
         }
 
         const employees = await Employee.find(filters);
@@ -113,6 +114,45 @@ app.get('/get', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.get('/getOffCount/:code', async (req, res) => {
+    try {
+        const { code } = req.params;
+        const result = await Employee.find({ billability: code ,isOnsite:"false"}).count();
+        //console.log("Line 122", result);
+        res.status(200).json({'success' : true, 'result': result});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/getOnCount/:code', async (req, res) => {
+    try {
+        const { code } = req.params;
+        const result = await Employee.find({ billability: code ,isOnsite:"true"}).count();
+
+        res.status(200).json({'success' : true, 'result': result});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/getFilteredData/:code/:onsite', async (req, res) => {
+    try {
+        const { code,onsite } = req.params;
+        const result = await Employee.find({ billability: code ,isOnsite:onsite})
+                                    .sort({managerName:1,grade:1});
+        //console.log("line 146", result);
+
+        res.status(200).json({'success' : true, 'result': result});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 app.delete('/delete/:id', async (req, res) => {
     try {
@@ -166,32 +206,6 @@ app.put('/update/:id', async (req, res) => {
     }
 });
 
-
-app.get('/count', async (req, res) => {
-    try {
-        const { projectId, grade, isOnsite, projectName } = req.query;
-        const filters = {};
-
-        if (projectId) {
-            filters.projectId = projectId;
-        }
-        if (grade) {
-            filters.grade = grade;
-        }
-        if (isOnsite) {
-            filters.isOnsite = isOnsite;
-        }
-        if (projectName) {
-            filters.projectName = projectName;
-        }
-
-        const count = await Employee.countDocuments(filters);
-        res.json(count);
-    } catch (error) {
-        console.error(err);
-        res.status(500).send('Error in count endpoint');
-    }
-});
 
 
 app.listen(port, () => {
