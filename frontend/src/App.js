@@ -8,19 +8,20 @@ import EditComponent from "./components/EditComponent";
 import UploadComponent from "./components/UploadComponent";
 import TrashComponent from "./components/TrashComponent";
 import MainTable from "./components/MainTable";
+import SummaryComponent from "./components/SummaryComponent";
 
 function App() {
   const [data, setData] = useState([]);
-  const [projectIdFilter, setProjectIdFilter] = useState("");
-  const [billabilityFilter, setBillabilityFilter] = useState("");
-  const [gradeFilter, setGradeFilter] = useState("");
+  const [filters, setFilters] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [view, setView] = useState("home");
+  const [view, setView] = useState("summary");
+  const [sortValue, setSortValue] = useState({ empId: 1 });
+  const [showTable, setShowTable] = useState(true);
 
-  const handleSave = (updatedData) => {
+  const handleSave = (updatedEmp) => {
     // Make the update request to the server using axios
     axios
-      .put(`http://localhost:8000/update/${updatedData.empId}`, updatedData)
+      .put(`http://localhost:8000/update/${updatedEmp.empId}`, updatedEmp)
       .then((res) => {
         console.log(res.data);
         setSelectedEmployee(null);
@@ -34,11 +35,7 @@ function App() {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/get", {
-        params: {
-          projectId: projectIdFilter,
-          billability: billabilityFilter,
-          grade: gradeFilter,
-        },
+        params: { filters, sortValue },
       });
       setData(response.data);
     } catch (error) {
@@ -48,7 +45,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [projectIdFilter, billabilityFilter, gradeFilter]);
+  }, [filters, sortValue]);
 
   const handleDownload = () => {
     // Check if data is empty
@@ -81,16 +78,15 @@ function App() {
 
   return (
     <div className="container">
-      <div className="navbar">
+      <div className="navbar" style={{ display: !showTable && "none" }}>
         <ul>
           <h1>ExcelScrapper</h1>
         </ul>
 
         <ul>
           <li>
-            <button onClick={() => setView("home")}>Home</button>
+            <button onClick={() => setView("summary")}>Home</button>
           </li>
-
           <li>
             <button onClick={() => setView("upload")}>Upload</button>
           </li>
@@ -98,8 +94,9 @@ function App() {
           <li>
             <button onClick={() => setView("trash")}>Trash</button>
           </li>
+
           <li>
-            <button onClick={() => setView("summary")}>Summary</button>
+            <button onClick={() => setView("home")}>Show All</button>
           </li>
         </ul>
       </div>
@@ -119,16 +116,22 @@ function App() {
               <input
                 className="filter-input"
                 type="text"
-                value={projectIdFilter}
-                onChange={(e) => setProjectIdFilter(e.target.value)}
+                value={filters.projectId}
+                onChange={(e) =>
+                  setFilters({ ...filters, projectId: e.target.value })
+                }
               />
             </label>
+
             <label className="filter-label">
-              Billability<span> </span>
+              Manager Name<span> </span>
               <input
                 className="filter-input"
                 type="text"
-                onChange={(e) => setBillabilityFilter(e.target.value)}
+                value={filters.managerName}
+                onChange={(e) =>
+                  setFilters({ ...filters, managerName: e.target.value })
+                }
               />
             </label>
             <label className="filter-label">
@@ -136,14 +139,17 @@ function App() {
               <input
                 className="filter-input"
                 type="text"
-                value={gradeFilter}
-                onChange={(e) => setGradeFilter(e.target.value)}
+                value={filters.grade}
+                onChange={(e) =>
+                  setFilters({ ...filters, grade: e.target.value })
+                }
               />
             </label>
 
             <button className="upload-button" onClick={handleDownload}>
               Download
             </button>
+
             {/* I think  Button is not usefull here */}
             {/* <button className="filter-button" onClick={handleFilter}>
           Filter
@@ -154,6 +160,7 @@ function App() {
           <DataComponent
             className="container"
             data={data}
+            setSortValue={setSortValue}
             selectEmployee={setSelectedEmployee}
             refresh={fetchData}
           />
@@ -178,7 +185,15 @@ function App() {
       {view === "trash" && <TrashComponent refresh={fetchData} />}
 
       {/*Summary table*/}
-      {view === "summary" && <MainTable selectEmployee={selectedEmployee} />}
+      {view === "summary" && (
+        <MainTable
+          showTable={showTable}
+          setShowTable={setShowTable}
+          selectEmployee={selectedEmployee}
+          setView={setView}
+        />
+        // <SummaryComponent />
+      )}
     </div>
   );
 }

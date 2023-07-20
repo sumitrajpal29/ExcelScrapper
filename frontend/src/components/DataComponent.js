@@ -3,9 +3,14 @@ import "./DataComponent.css";
 import axios from "axios";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
-function DataComponent({ data, selectEmployee, refresh }) {
+function DataComponent({ data, selectEmployee, setSortValue, refresh }) {
   function handleEdit(emp) {
     selectEmployee(emp);
+  }
+
+  function setSort(value) {
+    setSortValue(value);
+    refresh();
   }
 
   async function handleDelete(id) {
@@ -36,26 +41,32 @@ function DataComponent({ data, selectEmployee, refresh }) {
             <tr>
               <th></th>
 
-              <th>Emp ID</th>
-              <th>Name</th>
-              <th>Grade</th>
-              <th>Is Onsite</th>
-              <th>Project Id</th>
-              <th>Project Name</th>
-              <th>Manager Name</th>
-              <th>Available Hours</th>
-              <th>Billed Hours</th>
-              <th>Utilization %</th>
-              <th>Utilization Range</th>
-              <th>Billed FTE</th>
-              <th>Total FTE</th>
-              <th>Unbilled FTE</th>
+              <th onClick={() => setSort({ empId: 1 })}>Emp ID</th>
+              <th onClick={() => setSort({ name: 1 })}>Name</th>
+              <th onClick={() => setSort({ grade: 1 })}>Grade</th>
+              <th onClick={() => setSort({ isOnsite: 1 })}>Is Onsite</th>
+              <th onClick={() => setSort({ projectId: 1 })}>Project Id</th>
+              <th onClick={() => setSort({ projectName: 1 })}>Project Name</th>
+              <th onClick={() => setSort({ managerName: 1 })}>Manager Name</th>
+              <th onClick={() => setSort({ availableHours: 1 })}>
+                Available Hours
+              </th>
+              <th onClick={() => setSort({ billedHours: 1 })}>Billed Hours</th>
+              <th onClick={() => setSort({ utilizationPercentage: 1 })}>
+                Utilization %
+              </th>
+              <th onClick={() => setSort({ utilizationRange: 1 })}>
+                Utilization Range
+              </th>
+              <th onClick={() => setSort({ billedFTE: 1 })}>Billed FTE</th>
+              <th onClick={() => setSort({ totalFTE: 1 })}>Total FTE</th>
+              <th onClick={() => setSort({ unbilledFTE: 1 })}>Unbilled FTE</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {data.map((item) => (
-              <tr key={item.empId}>
+              <tr key={item._id}>
                 <AiOutlineEdit
                   color="blue"
                   onClick={() => {
@@ -78,7 +89,7 @@ function DataComponent({ data, selectEmployee, refresh }) {
                 <td>{item.unbilledFTE}</td>
                 <AiOutlineDelete
                   color="red"
-                  onClick={() => handleDelete(item.empId)}
+                  onClick={() => handleDelete(item._id)}
                 />
               </tr>
             ))}

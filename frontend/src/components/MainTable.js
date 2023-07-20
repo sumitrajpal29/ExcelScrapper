@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import AssociateTable from "./Associate";
 
-function MainTable({ selectedEmployee }) {
+function MainTable({ selectedEmployee, showTable, setShowTable }) {
   let offTotal = 0,
     onTotal = 0;
 
@@ -13,11 +13,15 @@ function MainTable({ selectedEmployee }) {
   const billabilityCodes = [
     "Billed",
     "Billability Planned",
-    "No Billability Planned",
+    "No Billability Plan",
     "Moved Out",
     "Release initiated or Already released",
     "To be released or reassigned",
   ];
+
+  function hideTable() {
+    setShowTable(false);
+  }
 
   function getOffCount(bCode) {
     try {
@@ -73,7 +77,7 @@ function MainTable({ selectedEmployee }) {
   //ui
   return (
     <div className="container">
-      <table className="data-table">
+      <table className="data-table" style={{ display: !showTable && "none" }}>
         <thead>
           <tr>
             <th>Billability Status</th>
@@ -88,13 +92,13 @@ function MainTable({ selectedEmployee }) {
               <td>{code}</td>
 
               <td style={{ textAlign: "center" }}>
-                <NavLink to={`${code}/false`}>
+                <NavLink to={`${code}/false`} onClick={hideTable}>
                   <span className={code}>{getOffCount(code)}</span>
                 </NavLink>
               </td>
 
               <td style={{ textAlign: "center" }}>
-                <NavLink to={`${code}/true`}>
+                <NavLink to={`${code}/true`} onClick={hideTable}>
                   <span id={code}>{getOnSiteCount(code)}</span>
                 </NavLink>
               </td>
@@ -113,7 +117,13 @@ function MainTable({ selectedEmployee }) {
       <Routes>
         <Route
           path=":code/:isOnsite"
-          element={<AssociateTable selectEmployee={selectedEmployee} />}
+          element={
+            <AssociateTable
+              showTable={showTable}
+              setShowTable={setShowTable}
+              selectEmployee={selectedEmployee}
+            />
+          }
         />
       </Routes>
     </div>

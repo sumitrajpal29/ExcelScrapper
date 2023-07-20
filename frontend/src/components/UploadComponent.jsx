@@ -25,7 +25,6 @@ export default function UploadComponent({ refresh, setView }) {
           console.log(res.data);
           setSelectedFile(null);
           refresh();
-          setView("home");
         })
         .catch((err) => {
           console.error(err);
@@ -37,17 +36,19 @@ export default function UploadComponent({ refresh, setView }) {
     <div className="container">
       <h2 className="heading">Upload Excel File</h2>
 
-      <form className="form-data">
-        <input
-          className="input-field"
-          type="file"
-          onChange={handleFileChange}
-        />
-        <br />
-        <button className="upload-button" onClick={handleUpload}>
-          Upload
-        </button>
-      </form>
+      <div className="content">
+        <form className="form-data">
+          <input
+            className="input-field"
+            type="file"
+            onChange={handleFileChange}
+          />
+          <br />
+          <button className="upload-button" onClick={handleUpload}>
+            Upload
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

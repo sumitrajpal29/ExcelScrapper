@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import DataComponent from "./DataComponent";
 
-function AssociateTable({ selectEmployee }) {
+function AssociateTable({ selectEmployee, showTable, setShowTable }) {
   const [data, setData] = useState([]);
 
   const { code, isOnsite } = useParams();
@@ -29,7 +29,12 @@ function AssociateTable({ selectEmployee }) {
     getfilteredData();
   }, [code, isOnsite]);
 
-  return <DataComponent data={data} selectEmployee={selectEmployee} />;
+  return (
+    <div style={{ display: showTable && "none" }}>
+      <button onClick={() => setShowTable(true)}>Close</button>
+      <DataComponent data={data} selectEmployee={selectEmployee} />
+    </div>
+  );
 }
 
 export default AssociateTable;

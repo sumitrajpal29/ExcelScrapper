@@ -26,7 +26,7 @@ const TrashComponent = ({ refresh }) => {
         .post("http://localhost:8000/uploadSingle", item)
         .then(async (res) => {
           console.log(res.data);
-          handlePermanentDelete(item.empId);
+          handlePermanentDelete(item._id);
         });
     } catch (error) {
       console.log("Error in FE handleRecover: " + error);
@@ -52,33 +52,40 @@ const TrashComponent = ({ refresh }) => {
       {trashData && trashData.length > 0 ? (
         <div>
           <h2>Trash data({trashData.length})</h2>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Restore</th>
-                <th>Emp ID</th>
-                <th>Name</th>
-                <th>Permanently Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {trashData.map((item) => (
+          <div className="content">
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <td>
-                    <FaUndo color="green" onClick={() => handleRecover(item)} />
-                  </td>
-                  <td>{item.empId}</td>
-                  <td>{item.name}</td>
-                  <td>
-                    <Delete
-                      color="red"
-                      onClick={() => handlePermanentDelete(item.empId)}
-                    />
-                  </td>
+                  <th>Restore</th>
+                  <th>Emp ID</th>
+                  <th>Name</th>
+                  <th>Project Name</th>
+                  <th>Permanently Delete</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {trashData.map((item) => (
+                  <tr>
+                    <td>
+                      <FaUndo
+                        color="green"
+                        onClick={() => handleRecover(item)}
+                      />
+                    </td>
+                    <td>{item.empId}</td>
+                    <td>{item.name}</td>
+                    <td>{item.projectName}</td>
+                    <td>
+                      <Delete
+                        color="red"
+                        onClick={() => handlePermanentDelete(item._id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <h2>Trash is Empty</h2>
